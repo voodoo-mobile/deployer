@@ -4,8 +4,8 @@ require 'yii2-app-basic.php';
 
 env('sources_path', '{{release_path}}/sources/web');
 
-set('shared_dirs', ['{{sources_path}}/web/uploads']);
-set('writable_dirs', ['{{sources_path}}/runtime', '{{sources_path}}/web/assets', '{{sources_path}}/web/uploads']);
+set('shared_dirs', ['{{sources_path}}/web/uploads', '{{sources_path}}/vendor']);
+
 set('writable_use_sudo', true);
 set('default_branch', 'develop');
 
@@ -31,14 +31,10 @@ option('branch', null, \Symfony\Component\Console\Input\InputOption::VALUE_OPTIO
 
 task('deploy:vendors', function () {
     run("cd {{sources_path}} && curl -sS https://getcomposer.org/installer | php");
-    run("cd {{sources_path}} && php composer.phar install");
+    run("cd {{sources_path}} && php composer.phar install --prefer-dist");
 })->desc('Installing vendors');
 
 task('publish', function () {
-    run("mkdir -p {{sources_path}}/runtime && sudo chmod -R 777 {{sources_path}}/runtime");
-    run("mkdir -p {{sources_path}}/web/assets && sudo chmod -R 777 {{sources_path}}/web/assets");
-    run("mkdir -p {{sources_path}}/web/uploads && sudo chmod -R 777 {{sources_path}}/web/uploads");
-
     run("cd {{sources_path}} && ln -sfn {{sources_path}}/web /var/www/{{branch_path}}");
 })->desc('Publishing to www');
 
@@ -47,6 +43,10 @@ task('deploy:run_migrations', function () {
 })->desc('Run migrations');
 
 task('deploy:prerequisites', function () {
+    run("sudo rm -rf {{sources_path}}/runtime && mkdir -p {{sources_path}}/runtime && sudo chmod -R 777 {{sources_path}}/runtime");
+    run("sudo rm -rf {{sources_path}}/web/assets && mkdir -p {{sources_path}}/web/assets && sudo chmod -R 777 {{sources_path}}/web/assets");
+    run("mkdir -p {{sources_path}}/web/uploads && sudo chmod -R 777 {{sources_path}}/web/uploads");
+
     $stages = env('stages');
     foreach ($stages as $stage) {
         run("cd {{sources_path}} && touch " . $stage);
