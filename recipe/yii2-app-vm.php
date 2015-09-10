@@ -2,30 +2,42 @@
 
 require 'yii2-app-basic.php';
 
-// Set up a new path. It is necessary for apps where the source path is not located in the root folder
 env('sources_path', '{{release_path}}/sources/web');
 
-// Set up writable paths
 set('writable_dirs', ['{{sources_path}}/runtime', '{{sources_path}}/web/assets']);
+set('writable_use_sudo', true);
 
-// Do not use sdo users. It is a bad thing actually.
-set('writable_use_sudo', false);
+env('branch', function () {
+    if (input()->hasOption('branch')) {
+        return input()->getOption('branch');
+    }
+});
 
-// Overriding vendors task. Composer.json is not located in the root folder
+env('branch_path', function () {
+    $branch = env('branch');
+    if (!empty($branch)) {
+        $branch = strtolower(str_replace('/', '-', $branch));
+    }
+
+    return $branch;
+});
+
+option('branch', null, \Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, 'Branch to deploy.');
+
 task('deploy:vendors', function () {
     run("cd {{sources_path}} && curl -sS https://getcomposer.org/installer | php");
     run("cd {{sources_path}} && php composer.phar install");
 })->desc('Installing vendors');
 
-// Same for migrations
+task('publish', function () {
+    run("mkdir -p -m 777 {{sources_path}}/runtime");
+    run("mkdir -p -m 777 {{sources_path}}/web/assets");
+
+    run("cd {{sources_path}} && ln -sfn {{sources_path}}/web /var/www/{{project}}-{{branch_path}}");
+})->desc('Publishing to www');
+
 task('deploy:run_migrations', function () {
     run('php {{sources_path}}/yii migrate up --interactive=0');
 })->desc('Run migrations');
 
-// Creates a link to /var/www/project
-task('publish', function () {
-    run("cd {{sources_path}} && ln -sfn {{sources_path}}/web /var/www/{{project}}");
-})->desc('Publishing to www');
-
-// Include publishing to the chain of tasks
-after('cleanup', 'publish');
+before('cleanup', 'publish');
