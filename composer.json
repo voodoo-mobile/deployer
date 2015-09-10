@@ -1,17 +1,17 @@
 {
-    "name": "deployer/deployer",
-    "description": "Deployment Tool",
+    "name": "voodoo-mobile/deployer",
+    "description": "Deployment Tool Fork for VM",
     "license": "MIT",
     "homepage": "http://deployer.org",
     "support": {
-        "issues": "https://github.com/deployphp/deployer/issues",
-        "source": "https://github.com/deployphp/deployer",
+        "issues": "https://github.com/voodoo-mobile/deployer/issues",
+        "source": "https://github.com/voodoo-mobile/deployer",
         "docs": "http://deployer.org/docs"
     },
     "authors": [
         {
-            "name": "Anton Medvedev",
-            "email": "anton@elfet.ru"
+            "name": "Alexander Kryshtalev",
+            "email": "kryshtalev@gmail.com"
         }
     ],
     "autoload": {
