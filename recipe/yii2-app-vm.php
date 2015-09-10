@@ -44,4 +44,12 @@ task('deploy:run_migrations', function () {
     run('php {{sources_path}}/yii migrate up --interactive=0');
 })->desc('Run migrations');
 
+task('deploy:prerequisites', function () {
+    $stages = env('stages');
+    foreach ($stages as $stage) {
+        run("cd {{sources_path}} && touch " . $stage);
+    }
+});
+
+after('deploy:update_code', 'deploy:prerequisites');
 before('cleanup', 'publish');
