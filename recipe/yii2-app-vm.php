@@ -4,7 +4,8 @@ require 'yii2-app-basic.php';
 
 env('sources_path', '{{release_path}}/sources/web');
 
-set('writable_dirs', ['{{sources_path}}/runtime', '{{sources_path}}/web/assets']);
+set('shared_dirs', ['{{sources_path}}/web/uploads']);
+set('writable_dirs', ['{{sources_path}}/runtime', '{{sources_path}}/web/assets', '{{sources_path}}/web/uploads']);
 set('writable_use_sudo', true);
 set('default_branch', 'develop');
 
@@ -36,6 +37,7 @@ task('deploy:vendors', function () {
 task('publish', function () {
     run("mkdir -p {{sources_path}}/runtime && sudo chmod -R 777 {{sources_path}}/runtime");
     run("mkdir -p {{sources_path}}/web/assets && sudo chmod -R 777 {{sources_path}}/web/assets");
+    run("mkdir -p {{sources_path}}/web/uploads && sudo chmod -R 777 {{sources_path}}/uploads");
 
     run("cd {{sources_path}} && ln -sfn {{sources_path}}/web /var/www/{{branch_path}}");
 })->desc('Publishing to www');
