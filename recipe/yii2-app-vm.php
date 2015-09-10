@@ -34,8 +34,8 @@ task('deploy:vendors', function () {
 })->desc('Installing vendors');
 
 task('publish', function () {
-    run("mkdir -p -m 777 {{sources_path}}/runtime");
-    run("mkdir -p -m 777 {{sources_path}}/web/assets");
+    run("mkdir -p {{sources_path}}/runtime && sudo chmod -R 777 {{sources_path}}/runtime");
+    run("mkdir -p {{sources_path}}/web/assets && sudo chmod -R 777 {{sources_path}}/web/assets");
 
     run("cd {{sources_path}} && ln -sfn {{sources_path}}/web /var/www/{{branch_path}}");
 })->desc('Publishing to www');
