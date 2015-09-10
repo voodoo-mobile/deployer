@@ -18,11 +18,12 @@ env('branch', function () {
 
 env('branch_path', function () {
     $branch = env('branch');
+
     if (!empty($branch) && $branch != get('default_branch')) {
-        $branch = '-' . strtolower(str_replace('/', '-', $branch));
+        return '{{project}}-' . strtolower(str_replace('/', '-', $branch));
     }
 
-    return $branch;
+    return '{{project}}';
 });
 
 option('branch', null, \Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, 'Branch to deploy.');
@@ -36,7 +37,7 @@ task('publish', function () {
     run("mkdir -p -m 777 {{sources_path}}/runtime");
     run("mkdir -p -m 777 {{sources_path}}/web/assets");
 
-    run("cd {{sources_path}} && ln -sfn {{sources_path}}/web /var/www/{{project}}{{branch_path}}");
+    run("cd {{sources_path}} && ln -sfn {{sources_path}}/web /var/www/{{branch_path}}");
 })->desc('Publishing to www');
 
 task('deploy:run_migrations', function () {
