@@ -6,17 +6,20 @@ env('sources_path', '{{release_path}}/sources/web');
 
 set('writable_dirs', ['{{sources_path}}/runtime', '{{sources_path}}/web/assets']);
 set('writable_use_sudo', true);
+set('default_branch', 'develop');
 
 env('branch', function () {
     if (input()->hasOption('branch')) {
         return input()->getOption('branch');
+    } else {
+        return get('default_branch');
     }
 });
 
 env('branch_path', function () {
     $branch = env('branch');
-    if (!empty($branch)) {
-        $branch = strtolower(str_replace('/', '-', $branch));
+    if (!empty($branch) && $branch != get('default_branch')) {
+        $branch = '-' . strtolower(str_replace('/', '-', $branch));
     }
 
     return $branch;
@@ -33,7 +36,7 @@ task('publish', function () {
     run("mkdir -p -m 777 {{sources_path}}/runtime");
     run("mkdir -p -m 777 {{sources_path}}/web/assets");
 
-    run("cd {{sources_path}} && ln -sfn {{sources_path}}/web /var/www/{{project}}-{{branch_path}}");
+    run("cd {{sources_path}} && ln -sfn {{sources_path}}/web /var/www/{{project}}{{branch_path}}");
 })->desc('Publishing to www');
 
 task('deploy:run_migrations', function () {
