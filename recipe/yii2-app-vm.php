@@ -4,12 +4,15 @@ require 'yii2-app-basic.php';
 
 env('sources_path', '{{release_path}}/sources/web');
 
-set('shared_dirs', [
+$dirs = [
     '{{sources_path}}/runtime',
     '{{sources_path}}/web/assets',
     '{{sources_path}}/web/uploads',
     '{{sources_path}}/rbac'
-]);
+];
+
+set('shared_dirs', $dirs);
+set('writable_dirs', $dirs);
 
 set('writable_use_sudo', true);
 set('default_branch', 'develop');
