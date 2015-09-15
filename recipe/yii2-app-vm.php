@@ -5,10 +5,10 @@ require 'yii2-app-basic.php';
 env('sources_path', '{{release_path}}/sources/web');
 
 $dirs = [
-    '{{sources_path}}/runtime',
-    '{{sources_path}}/web/assets',
-    '{{sources_path}}/web/uploads',
-    '{{sources_path}}/rbac'
+    'sources/web/runtime',
+    'sources/web/web/assets',
+    'sources/web/web/uploads',
+    'sources/web/rbac'
 ];
 
 set('shared_dirs', $dirs);
