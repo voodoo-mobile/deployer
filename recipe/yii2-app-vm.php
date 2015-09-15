@@ -4,17 +4,15 @@ require 'yii2-app-basic.php';
 
 env('sources_path', '{{release_path}}/sources/web');
 
-$dirs = [
+set('shared_dirs', [
     'sources/web/runtime',
     'sources/web/web/assets',
     'sources/web/web/uploads',
     'sources/web/rbac'
-];
-
-set('shared_dirs', $dirs);
-set('writable_dirs', $dirs);
+]);
 
 set('writable_use_sudo', true);
+
 set('default_branch', 'develop');
 
 env('branch', function () {
@@ -43,6 +41,10 @@ task('deploy:vendors', function () {
 })->desc('Installing vendors');
 
 task('publish', function () {
+    $dirs = get('shared_dirs');
+    foreach ($dirs as $dir) {
+        run("mkdir -p {{release_path}}/" . $dir . " && sudo chmod -R 777 {{release_path}}/" . $dir);
+    }
     run("cd {{sources_path}} && ln -sfn {{sources_path}}/web /var/www/{{branch_path}}");
 })->desc('Publishing to www');
 
