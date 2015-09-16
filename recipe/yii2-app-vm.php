@@ -8,7 +8,6 @@ set('shared_dirs', [
     'runtime',
     'web/assets',
     'web/uploads',
-    'rbac'
 ]);
 
 set('writable_use_sudo', true);
