@@ -2,8 +2,6 @@
 
 require 'yii2-app-basic.php';
 
-env('sources_path', '{{release_path}}');
-
 set('shared_dirs', [
     'runtime',
     'web/assets',
@@ -11,7 +9,6 @@ set('shared_dirs', [
 ]);
 
 set('writable_use_sudo', true);
-
 set('default_branch', 'develop');
 
 env('branch', function () {
@@ -34,27 +31,18 @@ env('branch_path', function () {
 
 option('branch', null, \Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, 'Branch to deploy.');
 
-task('deploy:vendors', function () {
-    run("cd {{sources_path}} && curl -sS https://getcomposer.org/installer | php");
-    run("cd {{sources_path}} && php composer.phar install --prefer-dist");
-})->desc('Installing vendors');
-
 task('publish', function () {
     $dirs = get('shared_dirs');
     foreach ($dirs as $dir) {
         run("mkdir -p {{release_path}}/" . $dir . " && sudo chmod -R 777 {{release_path}}/" . $dir);
     }
-    run("cd {{sources_path}} && ln -sfn {{sources_path}}/web /var/www/{{branch_path}}");
+    run("cd {{release_path}} && ln -sfn {{release_path}}/web /var/www/{{branch_path}}");
 })->desc('Publishing to www');
-
-task('deploy:run_migrations', function () {
-    run('php {{sources_path}}/yii migrate up --interactive=0');
-})->desc('Run migrations');
 
 task('deploy:prerequisites', function () {
     $stages = env('stages');
     foreach ($stages as $stage) {
-        run("cd {{sources_path}} && touch " . $stage);
+        run("cd {{release_path}} && touch " . $stage);
     }
 });
 
