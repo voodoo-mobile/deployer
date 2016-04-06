@@ -1,8 +1,9 @@
 <?php
 
 use Deployer\Deployer;
+use Symfony\Component\Console\Input\InputOption;
 
-require 'yii2-app-basic.php';
+require_once 'yii2-app-basic.php';
 
 set('shared_dirs', [
     'runtime',
@@ -21,7 +22,7 @@ env('branch', function () {
     }
 });
 
-option('branch', null, \Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, 'Branch to deploy.');
+option('branch', null, InputOption::VALUE_OPTIONAL, 'Branch to deploy.');
 
 task('deploy:publish', function () {
     $dirs = get('shared_dirs');
