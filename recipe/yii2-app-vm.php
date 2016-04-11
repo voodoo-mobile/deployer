@@ -1,6 +1,5 @@
 <?php
 
-use Deployer\Deployer;
 use Symfony\Component\Console\Input\InputOption;
 
 require_once 'yii2-app-basic.php';
@@ -39,5 +38,10 @@ task('deploy:prerequisites', function () {
     }
 });
 
+task('deploy:compile', function () {
+    run("cd {{release_path}} && npm run-script production");
+});
+
 after('deploy:update_code', 'deploy:prerequisites');
+after('deploy:update_code', 'deploy:compile');
 before('cleanup', 'deploy:publish');
