@@ -39,7 +39,7 @@ task('deploy:prerequisites', function () {
 });
 
 task('deploy:compile', function () {
-    run("cd {{release_path}} && npm run-script production");
+    run("cd {{release_path}} && npm install && npm run-script production");
 });
 
 after('deploy:update_code', 'deploy:prerequisites');
