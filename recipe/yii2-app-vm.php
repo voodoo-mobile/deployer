@@ -43,5 +43,4 @@ task('deploy:compile', function () {
 });
 
 after('deploy:update_code', 'deploy:prerequisites');
-after('deploy:update_code', 'deploy:compile');
 before('cleanup', 'deploy:publish');
