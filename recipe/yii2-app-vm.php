@@ -26,15 +26,20 @@ option('branch', null, InputOption::VALUE_OPTIONAL, 'Branch to deploy.');
 task('deploy:publish', function () {
     $dirs = get('shared_dirs');
     foreach ($dirs as $dir) {
-        run("mkdir -p {{release_path}}/" . $dir . " && sudo chmod -R 777 {{release_path}}/" . $dir);
+        run("mkdir -p {{release_path}}/{$dir} && sudo chmod -R 777 {{release_path}}/{$dir}");
     }
     run("cd {{release_path}} && ln -sfn {{release_path}}/web /var/www/{{project}}");
+
+    $stages = env('stages');
+    foreach ($stages as $stage) {
+        run("cd {{release_path}}/web && [[ -e index-{$stage}.php ]] && cp -f index-{$stage}.php index.php");
+    }
 })->desc('Publishing to www');
 
 task('deploy:prerequisites', function () {
     $stages = env('stages');
     foreach ($stages as $stage) {
-        run("cd {{release_path}} && touch " . $stage);
+        run("cd {{release_path}} && touch {$stage}");
     }
 });
 
