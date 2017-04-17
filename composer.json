@@ -1,11 +1,11 @@
 {
-  "name": "voodoo-mobile/deployer",
-  "description": "Deployment Tool Fork for VM",
+  "name": "voodoo-rocks/deployer",
+  "description": "Deployment Tool Fork for Voodoo Rocks",
   "license": "MIT",
   "homepage": "http://deployer.org",
   "support": {
-    "issues": "https://github.com/voodoo-mobile/deployer/issues",
-    "source": "https://github.com/voodoo-mobile/deployer",
+    "issues": "https://github.com/voodoo-rocks/deployer/issues",
+    "source": "https://github.com/voodoo-rocks/deployer",
     "docs": "http://deployer.org/docs"
   },
   "authors": [
